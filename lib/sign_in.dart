@@ -28,7 +28,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
       if (authCredential.uid.isNotEmpty) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (_) => UserDataScreen()));
+            context, MaterialPageRoute(builder: (_) => HomeScreen()));
       } else {
         Fluttertoast.showToast(msg: "Something is Wrong");
       }
