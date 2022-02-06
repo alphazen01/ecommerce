@@ -1,6 +1,5 @@
 import 'package:abc/home.dart';
 import 'package:abc/sign_up.dart';
-import 'package:abc/user_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';

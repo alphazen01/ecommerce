@@ -1,6 +1,7 @@
 import 'package:abc/widget/custom_accessories.dart';
 import 'package:abc/widget/custom_product.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -14,12 +15,30 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   int activeIndex=0;
-  final slideImage=[
-    "assets/banner.png",
-    "assets/banner.png",
-    "assets/banner.png",
-    
-  ];
+  final slideImage=[ ];
+  
+
+fetchImage()async{
+ var firestoreInstance=FirebaseFirestore.instance;
+ QuerySnapshot qn=await firestoreInstance.collection("h_carousel").get();
+ 
+   for(int i=0; i<qn.docs.length; i++){
+   print("${qn.docs[i]}");
+   slideImage.add(qn.docs[i]["path"]);
+ }
+ setState(() {
+   
+ });
+
+
+}
+@override
+  void initState() {
+    fetchImage();
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,8 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView
-      (
+      body: SingleChildScrollView(
         child: Column(
           children: [
             TextField(
@@ -66,21 +84,25 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             )
             ),
-             CarouselSlider.builder(
-                options: CarouselOptions(
-                  viewportFraction: 1,
-                  enlargeCenterPage: true,
-                  height: 300,
-                  autoPlayInterval: Duration(seconds: 2),
-                  onPageChanged: (index, reason) =>
-                      setState(() => activeIndex = index),
-                ),
-                itemCount: slideImage.length,
-                itemBuilder: (context, index, realIndex) {
-                  final img = slideImage[index];
-                  return buildImage(img, index);
-                },
-              ),
+             Builder(
+               builder: (context) {
+                 return slideImage.length>0? CarouselSlider.builder(
+                    options: CarouselOptions(
+                      viewportFraction: 1,
+                      enlargeCenterPage: true,
+                      height: 300,
+                      autoPlayInterval: Duration(seconds: 2),
+                      onPageChanged: (index, reason) =>
+                          setState(() => activeIndex = index),
+                    ),
+                    itemCount: slideImage.length,
+                    itemBuilder: (context, index, realIndex) {
+                      final img = slideImage[index];
+                      return Image.network(img,);
+                    },
+                  ):CircularProgressIndicator();
+               }
+             ),
               builIndicator(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -154,6 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 )  
               ],
             ),
+            Image.asset("assets/test_photo.jpg"),
              SizedBox(
               height: 50,
             ),
@@ -168,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildImage(String img, int index) => Container(
         margin: EdgeInsets.symmetric(horizontal: 24),
         color: Colors.grey,
-        child: Image.asset(
+        child: Image.network(
           img,
           fit: BoxFit.fill,
         ),
