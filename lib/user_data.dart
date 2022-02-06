@@ -35,22 +35,22 @@ class _UserDataScreenState extends State<UserDataScreen> {
   }
 
  
-  // sendUserDataToDB() async {
-  //   final FirebaseAuth _auth = FirebaseAuth.instance;
-  //   var currentUser = _auth.currentUser;
-  //   CollectionReference _collectionRef =
-  //       FirebaseFirestore.instance.collection("users-form-data");
-  //   return _collectionRef.doc(currentUser!.email).set({
-  //     "name":_nameController.text,
-  //     "phone":_phoneController.text,
-  //     "dob":_dobController.text,
-  //     "gender":_genderController.text,
-  //     "age": _ageController.text,
-  //   })
-  //     ..then((value) => Navigator.push(
-  //             context, MaterialPageRoute(builder: (_) => HomeScreen())))
-  //         .catchError((error) => print("something is wrong. $error"));
-  // }
+  sendUserDataToDB() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var currentUser = _auth.currentUser;
+    CollectionReference _collectionRef =
+        FirebaseFirestore.instance.collection("users-form-data");
+    return _collectionRef.doc(currentUser!.email).set({
+      "name":_nameController.text,
+      "phone":_phoneController.text,
+      "dob":_dobController.text,
+      "gender":_genderController.text,
+      "age": _ageController.text,
+    })
+      ..then((value) => Navigator.push(
+              context, MaterialPageRoute(builder: (_) => HomeScreen())))
+          .catchError((error) => print("something is wrong. $error"));
+  }
 
 
 
@@ -209,7 +209,7 @@ class _UserDataScreenState extends State<UserDataScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 60),
                       child: ElevatedButton(
                         onPressed: () {
-                          getUser();
+                          sendUserDataToDB();
                         },
                         child: Text(
                           "Submit",
