@@ -1,6 +1,4 @@
 import 'package:abc/custom_splash.dart';
-
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,17 +10,7 @@ void main()async{
   await Firebase.initializeApp();
   runApp(
     MyApp()
-//   MaterialApp(
-//     debugShowCheckedModeBanner: false,
-//   // home:SignInScreen()
-//   initialRoute: SignInScreen.path,
-//   routes: {
-//     SignInScreen.path:(context)=>SignInScreen(),
-//     SignUpScreen.path:(context)=>SignUpScreen(),
-//     UserDataScreen.path:(context)=>UserDataScreen()
-//   },
-//   // home: HomeScreen(),
-//   )
+
   );
 }
 class MyApp extends StatelessWidget {
