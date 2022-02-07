@@ -1,7 +1,9 @@
+import 'package:abc/search.dart';
 import 'package:abc/widget/custom_accessories.dart';
 import 'package:abc/widget/custom_product.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -84,7 +86,10 @@ fetchProductImage()async{
           child: Column(
             children: [
               TextField(
+                onTap: ()=>Navigator.push(context, CupertinoPageRoute(builder: (_)=>SearchScreen())),
+              readOnly: true,
             decoration: InputDecoration(
+              
               hintText: "Search products here",
               fillColor: Color(0xffF2F2F7),
               filled: true,
@@ -112,13 +117,7 @@ fetchProductImage()async{
               )
               ),
               SizedBox(height: 20,),
-              ElevatedButton(
-                onPressed: (){
-                  print(products);
-                }, 
-                child: Text("print")
-                ),
-              SizedBox(height: 20,),
+
                Builder(
                  builder: (context) {
                    return slideImage.length>0? CarouselSlider.builder(
@@ -183,7 +182,7 @@ fetchProductImage()async{
                   crossAxisCount:2,
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 20,
-                  // mainAxisExtent: 190,
+                  // mainAxisExtent: 150,
                   
                   childAspectRatio: 1
                   ), 
