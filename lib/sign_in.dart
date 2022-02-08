@@ -1,3 +1,4 @@
+import 'package:abc/bottom_navigationbar.dart';
 import 'package:abc/home.dart';
 import 'package:abc/sign_up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,7 +28,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
       if (authCredential.uid.isNotEmpty) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (_) => HomeScreen()));
+            context, MaterialPageRoute(builder: (_) => NavigationScreen()));
       } else {
         Fluttertoast.showToast(msg: "Something is Wrong");
       }
