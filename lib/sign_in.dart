@@ -188,7 +188,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         primary: Colors.redAccent,
                         minimumSize: Size(double.infinity, 67),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),
@@ -204,7 +204,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, SignUpScreen.path);
+                            Navigator.push(context, MaterialPageRoute(builder:(_)=> SignUpScreen()));
                           },
                           child: Text(
                             "Sign Up",
