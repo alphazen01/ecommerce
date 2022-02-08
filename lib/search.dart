@@ -61,7 +61,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
                    return ListView(
                      children: snapshot.data!.docs.map((DocumentSnapshot document){
-                      
                          Map<String, dynamic>data=document.data() as Map<String,dynamic>;
                          return Card(
                            elevation: 5,

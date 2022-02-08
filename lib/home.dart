@@ -1,3 +1,4 @@
+import 'package:abc/details.dart';
 import 'package:abc/search.dart';
 import 'package:abc/widget/custom_accessories.dart';
 import 'package:abc/widget/custom_product.dart';
@@ -17,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   int activeIndex=0;
-  final slideImage=[ ];
+  final slideImage=[];
   List products=[];
   
 
@@ -86,7 +87,7 @@ fetchProductImage()async{
           child: Column(
             children: [
               TextField(
-                onTap: ()=>Navigator.push(context, CupertinoPageRoute(builder: (_)=>SearchScreen())),
+                onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>SearchScreen())),
               readOnly: true,
             decoration: InputDecoration(
               
@@ -187,33 +188,35 @@ fetchProductImage()async{
                   childAspectRatio: 1
                   ), 
                   itemBuilder: (BuildContext,  index){
-                    return Container(
-                      color: Colors.red,
-                    child: Card(
-                      elevation: 3,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            AspectRatio(
-                            aspectRatio: 2,
-                            child: Image.network(products[index]["product-img"])),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("${products[index]["product-name"]}",style: TextStyle(fontSize: 20),),
-                                  SizedBox(height: 5,),
-                                   Text("${products[index]["product-price"].toString()}",style: TextStyle(fontSize: 20),),
-                                ],
+                    return GestureDetector(
+                      onTap: (){
+                       Navigator.push(context, MaterialPageRoute(builder:(_)=> DetailsScreen(product: products[index],))); 
+                      },
+                      child: Card(
+                        elevation: 3,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AspectRatio(
+                              aspectRatio: 2,
+                              child: Image.network(products[index]["product-img"])),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("${products[index]["product-name"]}",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700),),
+                                    SizedBox(height: 5,),
+                                     Text("${products[index]["product-price"].toString()}",style: TextStyle(fontSize: 20),),
+                                  ],
+                                ),
                               ),
-                            ),
-                           
-                          ],
-                        ),
-                    ),
-                  );
+                             
+                            ],
+                          ),
+                      ),
+                    );
                   }
                   ),
               ), 
