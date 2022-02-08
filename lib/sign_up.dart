@@ -187,7 +187,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         primary: Colors.redAccent,
                         minimumSize: Size(double.infinity, 67),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),

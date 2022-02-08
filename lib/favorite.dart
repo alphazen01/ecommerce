@@ -12,7 +12,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   Widget build(BuildContext context) {
   return Scaffold(
       body: Container(
-        color: Colors.teal,
+        color: Colors.red,
       ),
     );
   }

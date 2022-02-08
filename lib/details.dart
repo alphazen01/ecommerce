@@ -1,4 +1,8 @@
+import 'package:abc/cart.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -12,6 +16,20 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   int activeIndex=0;
+  Future addToCart()async{
+    final FirebaseAuth auth=FirebaseAuth.instance;
+    var currentUser = auth.currentUser;
+    CollectionReference collectionRef=FirebaseFirestore.instance.collection("users-cart-items");
+    return collectionRef.doc(currentUser!.email).collection("items").doc().set(
+      {
+        "name":widget.product["product-name"],
+        "price":widget.product["product-price"],
+        "image":widget.product["product-img"],
+      }
+    ).then((value) => print("added"));
+   
+  }
+ 
  
   @override
   Widget build(BuildContext context) {
@@ -77,6 +95,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                  ElevatedButton(
                         onPressed: () {
+                          addToCart();
                         },
                         child: Text(
                           "Add to cart",

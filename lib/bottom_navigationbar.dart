@@ -15,8 +15,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
   int selectedIndex=0;
   List<Widget>screens=[
     HomeScreen(),
-    FavoriteScreen(),
     CartScreen(),
+    FavoriteScreen(),
     ProfileScreen()
 
   ];
@@ -28,11 +28,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-             
              icon:Icon(Icons.home),
               label: "Home",
               ),
-              
                BottomNavigationBarItem(
               icon:Icon(Icons.shopping_cart),
               label: "Cart",
