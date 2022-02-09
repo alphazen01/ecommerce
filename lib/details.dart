@@ -29,6 +29,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
     ).then((value) => print("added"));
    
   }
+  Future addToFavourite()async{
+    final FirebaseAuth auth=FirebaseAuth.instance;
+    var currentUser = auth.currentUser;
+    CollectionReference collectionRef=FirebaseFirestore.instance
+    .collection("users-favourite-items");
+    return collectionRef.doc(currentUser!.email).collection("items").doc().set(
+      {
+        "name":widget.product["product-name"],
+        "price":widget.product["product-price"],
+        "image":widget.product["product-img"],
+      }
+    ).then((value) => print("added to favourite"));
+   
+  }
  
  
   @override
@@ -50,17 +64,34 @@ class _DetailsScreenState extends State<DetailsScreen> {
           ),
         ),
         actions: [
-         Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: CircleAvatar(
-            backgroundColor: Colors.redAccent,
-            child: IconButton(
-              onPressed: (){
-              }, 
-              icon: Icon(Icons.favorite_border)
-            ),
+           StreamBuilder(
+            stream: FirebaseFirestore.instance.collection("users-favourite-items")
+            .doc(FirebaseAuth.instance.currentUser!.email)
+                .collection("items").where("name",isEqualTo: widget.product['product-name']).snapshots(),
+            builder: (BuildContext context, AsyncSnapshot snapshot){
+              if(snapshot.data==null){
+                return Text("");
+              }
+              return Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: CircleAvatar(
+                  backgroundColor: Colors.red,
+                  child: IconButton(
+                    onPressed: () => snapshot.data.docs.length==0?addToFavourite():print("Already Added"),
+                    icon: snapshot.data.docs.length==0? Icon(
+                      Icons.favorite_outline,
+                      color: Colors.white,
+                    ):Icon(
+                      Icons.favorite,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              );
+            },
+
           ),
-        ),
+      
         ],
       ),
       body: SafeArea(
@@ -96,6 +127,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                  ElevatedButton(
                         onPressed: () {
                           addToCart();
+                          Navigator.push(context, MaterialPageRoute(builder: (_)=>CartScreen()));
                         },
                         child: Text(
                           "Add to cart",

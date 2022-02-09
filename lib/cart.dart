@@ -1,6 +1,9 @@
+
+import 'package:abc/custom_alert.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 
 class CartScreen extends StatefulWidget {
   const CartScreen({ Key? key }) : super(key: key);
@@ -10,6 +13,11 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+
+
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +45,23 @@ class _CartScreenState extends State<CartScreen> {
                   style: TextStyle(color: Colors.red),),
                   trailing: GestureDetector(
                     onTap: (){
-                      FirebaseFirestore.instance.collection("users-cart-items").doc(FirebaseAuth.instance.currentUser!.email).collection("items").doc(documentSnapshot.id).delete();
+                      // FirebaseFirestore.instance.collection("users-cart-items")
+                      // .doc(FirebaseAuth.instance.currentUser!.email)
+                      // .collection("items").doc(documentSnapshot.id).delete();
+                     showDialog(
+                       barrierDismissible: false,
+                      context: context, 
+                      builder: (BuildContext context){
+                        return CustomAlert(
+                       onTap: (){
+                                FirebaseFirestore.instance.collection("users-cart-items")
+                      .doc(FirebaseAuth.instance.currentUser!.email)
+                      .collection("items").doc(documentSnapshot.id).delete();
+                       },
+                          
+                        );
+                      }
+                      );
                     },
                     child: CircleAvatar(
                     child: Icon(Icons.remove_circle)),
@@ -53,3 +77,4 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 }
+
