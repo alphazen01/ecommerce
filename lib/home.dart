@@ -34,7 +34,6 @@ fetchImage()async{
    
  });
 
-
 }
 fetchProductImage()async{
  var firestoreInstance=FirebaseFirestore.instance;
@@ -55,8 +54,6 @@ fetchProductImage()async{
  setState(() {
    
  });
-
-
 }
 @override
   void initState() {
@@ -172,19 +169,16 @@ fetchProductImage()async{
                   )  
                 ],
               ),
-              // SizedBox(height: 25,),
               Expanded(
               child:Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: GridView.builder(
                   itemCount: products.length,
-                  scrollDirection: Axis.horizontal,
+                  scrollDirection: Axis.vertical,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount:2,
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 20,
-                  // mainAxisExtent: 150,
-                  
                   childAspectRatio: 1
                   ), 
                   itemBuilder: (BuildContext,  index){
@@ -206,13 +200,14 @@ fetchProductImage()async{
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("${products[index]["product-name"]}",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700),),
+                                    Text("${products[index]["product-name"]}",
+                                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700),),
                                     SizedBox(height: 5,),
-                                     Text("${products[index]["product-price"].toString()}",style: TextStyle(fontSize: 20),),
+                                     Text("${products[index]["product-price"].toString()}",
+                                     style: TextStyle(fontSize: 20,color: Colors.red),),
                                   ],
                                 ),
                               ),
-                             
                             ],
                           ),
                       ),
