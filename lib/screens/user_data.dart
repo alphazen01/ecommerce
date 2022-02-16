@@ -1,4 +1,5 @@
-import 'package:abc/home.dart';
+import 'package:abc/screens/home.dart';
+import 'package:abc/widget/bottom_navigationbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _UserDataScreenState extends State<UserDataScreen> {
       "age": _ageController.text,
     })
       ..then((value) => Navigator.push(
-              context, MaterialPageRoute(builder: (_) => HomeScreen())))
+              context, MaterialPageRoute(builder: (_) => NavigationScreen())))
           .catchError((error) => print("something is wrong. $error"));
   }
 
@@ -223,7 +224,7 @@ class _UserDataScreenState extends State<UserDataScreen> {
                           primary: Colors.redAccent,
                           minimumSize: Size(double.infinity, 67),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                       ),

@@ -1,11 +1,13 @@
-import 'package:abc/details.dart';
-import 'package:abc/search.dart';
+import 'package:abc/controller/theme_controller.dart';
+import 'package:abc/product/details.dart';
+import 'package:abc/screens/search.dart';
 import 'package:abc/widget/custom_accessories.dart';
 import 'package:abc/widget/custom_product.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final themeController=Get.put(ThemeController());
 
   int activeIndex=0;
   final slideImage=[];
@@ -76,6 +79,20 @@ fetchProductImage()async{
             color: Colors.black
           ),
         ),
+        actions: [
+          ObxValue(
+               (data)=> Switch(
+                 inactiveThumbColor: Colors.red,
+                 activeColor: Colors.blue,
+                 value: themeController.isDark.value, 
+                 onChanged: (Value){
+                   themeController.isDark.value=Value;
+                   themeController.changeAppTheme(themeController.isDark.value);
+                 },
+                ),
+                false.obs
+             )
+        ],
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -214,47 +231,8 @@ fetchProductImage()async{
                     );
                   }
                   ),
-              ), 
+                ), 
                 ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                 TextButton(
-                   onPressed: (){}, 
-                   child: Text(
-                     "Accessories",
-                     style: TextStyle(
-                       color: Colors.redAccent,
-                     ),
-                    )
-                  ),
-                   TextButton(
-                   onPressed: (){}, 
-                   child: Row(
-                     children: [
-                       Text(
-                         "View All",
-                      style: TextStyle(
-                       color: Colors.redAccent,
-                       ),
-                        ),
-                        SizedBox(width: 5,),
-                       Icon(
-                         Icons.arrow_forward_ios,
-                         color: Colors.redAccent,
-                         size: 10,
-                        )
-                     ],
-                   )
-                  )  
-                ],
-              ),
-               SizedBox(
-                height: 50,
-              ),
-              CustomAccessories(
-                 label: "Mahmud",
-              ),
               SizedBox(height: 20,)
             ],
           ),

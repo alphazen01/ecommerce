@@ -1,12 +1,12 @@
-import 'package:abc/bottom_navigationbar.dart';
-import 'package:abc/home.dart';
-import 'package:abc/sign_up.dart';
+import 'package:abc/widget/bottom_navigationbar.dart';
+import 'package:abc/screens/home.dart';
+import 'package:abc/welcome/sign_up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class SignInScreen extends StatefulWidget {
-   static const String path = "SignInScreen";
+    static const String path = "SignInScreen";
   const SignInScreen({ Key? key }) : super(key: key);
 
   @override

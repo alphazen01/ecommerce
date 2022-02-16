@@ -1,7 +1,10 @@
+import 'package:abc/controller/custom_theme.dart';
 import 'package:abc/custom_splash.dart';
+import 'package:abc/screens/user_data.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 
 
 
@@ -21,7 +24,10 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: Size(375, 812),
       builder: (){
-        return MaterialApp(
+        return GetMaterialApp(
+          theme: lightTheme(),
+          darkTheme: darkTheme(),
+          themeMode: ThemeMode.light,
           debugShowCheckedModeBanner: false,
           home: SplashScreen(),
         );

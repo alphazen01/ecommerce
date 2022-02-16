@@ -1,7 +1,7 @@
-import 'package:abc/cart.dart';
-import 'package:abc/favorite.dart';
-import 'package:abc/home.dart';
-import 'package:abc/profile.dart';
+import 'package:abc/product/cart.dart';
+import 'package:abc/product/favorite.dart';
+import 'package:abc/screens/home.dart';
+import 'package:abc/screens/profile.dart';
 import 'package:flutter/material.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -52,7 +52,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.black,
         selectedIconTheme: IconThemeData(
-          color: Colors.green
+          color: Colors.redAccent
         ),
        
         onTap: (int index){
