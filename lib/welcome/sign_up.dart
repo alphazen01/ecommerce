@@ -1,6 +1,9 @@
-import 'package:abc/sign_in.dart';
-import 'package:abc/user_data.dart';
+
+
+import 'package:abc/welcome/sign_in.dart';
+import 'package:abc/screens/user_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -203,7 +206,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, SignInScreen.path);
+                          Navigator.push(context, CupertinoPageRoute(builder: (_)=>SignInScreen()));
                           },
                           child: Text(
                             "Sign In",
