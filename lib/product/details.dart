@@ -1,13 +1,20 @@
+import 'package:abc/Model/product_model.dart';
+import 'package:abc/controller/cart_controller.dart';
 import 'package:abc/product/cart.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class DetailsScreen extends StatefulWidget {
-  var product;
- DetailsScreen({ Key? key,this.product }) : super(key: key);
+  final ProductsModel product;
+
+ DetailsScreen({ Key? key,
+ required this.product,
+
+  }) : super(key: key);
 
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
@@ -15,19 +22,11 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   int activeIndex=0;
-  Future addToCart()async{
-    final FirebaseAuth auth=FirebaseAuth.instance;
-    var currentUser = auth.currentUser;
-    CollectionReference collectionRef=FirebaseFirestore.instance.collection("users-cart-items");
-    return collectionRef.doc(currentUser!.email).collection("items").doc().set(
-      {
-        "name":widget.product["product-name"],
-        "price":widget.product["product-price"],
-        "image":widget.product["product-img"],
-      }
-    ).then((value) => print("added"));
-   
+  void addToCart(BuildContext context){
+   Provider.of<CartController>(context,listen: false).addProduct(widget.product);
   }
+
+
   Future addToFavourite()async{
     final FirebaseAuth auth=FirebaseAuth.instance;
     var currentUser = auth.currentUser;
@@ -35,9 +34,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
     .collection("users-favourite-items");
     return collectionRef.doc(currentUser!.email).collection("items").doc().set(
       {
-        "name":widget.product["product-name"],
-        "price":widget.product["product-price"],
-        "image":widget.product["product-img"],
+        "name":widget.product.title,
+        "price":widget.product.price,
+        "image":widget.product.image,
       }
     ).then((value) => print("added to favourite"));
    
@@ -66,7 +65,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
            StreamBuilder(
             stream: FirebaseFirestore.instance.collection("users-favourite-items")
             .doc(FirebaseAuth.instance.currentUser!.email)
-                .collection("items").where("name",isEqualTo: widget.product['product-name']).snapshots(),
+                .collection("items").where("name",isEqualTo: widget.product.title).snapshots(),
             builder: (BuildContext context, AsyncSnapshot snapshot){
               if(snapshot.data==null){
                 return Text("");
@@ -76,7 +75,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 child: CircleAvatar(
                   backgroundColor: Colors.red,
                   child: IconButton(
-                    onPressed: () => snapshot.data.docs.length==0?addToFavourite():print("Already Added"),
+                    onPressed: () {
+                      addToFavourite();
+                    },
                     icon: snapshot.data.docs.length==0? Icon(
                       Icons.favorite_outline,
                       color: Colors.white,
@@ -110,25 +111,24 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     onPageChanged: (index, reason) =>
                         setState(() => activeIndex = index),
                   ),
-                  itemCount: widget.product.length,
+                  itemCount:3,
                   itemBuilder: (context, index, realIndex) {
-                    final img = widget.product["product-img"];
-                    return Image.network(img,);
+                    return Image.network(widget.product.image,);
                   },
                 ),
                 Center(child: builIndicator()),
-                Text(widget.product["product-name"],
+                Text(widget.product.title,
                 style: TextStyle(fontSize: 24),),
-                Text(widget.product["product-description"],
+                Text(widget.product.description,
                 style: TextStyle(fontSize: 16),),
-                Text(widget.product["product-price"],
+                Text("${widget.product.price.toString()}",
                 style: TextStyle(fontSize: 20,color: Colors.red),),
                 SizedBox(
                   height: 10,
                 ),
                  ElevatedButton(
                         onPressed: () {
-                          addToCart();
+                          addToCart(context);
                           Navigator.push(context, MaterialPageRoute(builder: (_)=>CartScreen()));
                         },
                         child: Text(
@@ -171,7 +171,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         dotColor: Colors.grey
         ),
         activeIndex: activeIndex,
-        count: widget.product.length,
+        count: 3,
       );
 
 }
