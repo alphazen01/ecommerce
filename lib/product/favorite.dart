@@ -33,9 +33,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               return Card(
                 elevation: 2,
                 child: ListTile(
-                  leading: Text(documentSnapshot["name"]),
-                  title: Text(" ${documentSnapshot["price"]}",
-                  style: TextStyle(color: Colors.red),),
+                  leading: Image.network(documentSnapshot["image"]),
+                  // leading: Text(documentSnapshot["name"]),
+                  title:Text(documentSnapshot["name"]),
+                  subtitle:  Text(" ${documentSnapshot["price"]}",
+                  style: TextStyle(color: Colors.red),), 
+                
                   trailing: GestureDetector(
                     onTap: (){
                       showDialog(

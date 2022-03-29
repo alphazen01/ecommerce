@@ -1,10 +1,14 @@
+import 'package:abc/controller/cart_controller.dart';
 import 'package:abc/controller/custom_theme.dart';
+import 'package:abc/controller/home_controller.dart';
 import 'package:abc/custom_splash.dart';
-import 'package:abc/screens/user_data.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:provider/provider.dart';
+
+import 'controller/provider_theme_controller.dart';
 
 
 
@@ -15,6 +19,7 @@ void main()async{
     MyApp()
 
   );
+
 }
 class MyApp extends StatelessWidget {
   const MyApp({ Key? key }) : super(key: key);
@@ -24,14 +29,46 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: Size(375, 812),
       builder: (){
-        return GetMaterialApp(
-          theme: lightTheme(),
-          darkTheme: darkTheme(),
-          themeMode: ThemeMode.light,
-          debugShowCheckedModeBanner: false,
-          home: SplashScreen(),
-        );
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider<ProviderThemeController>(
+              create: (BuildContext context) {
+                return ProviderThemeController();
+              }
+          ),
+           ChangeNotifierProvider<CartController>(
+              create: (BuildContext context) {
+                return CartController();
+              }
+          ),
+           ChangeNotifierProvider<HomeController>(
+              create: (BuildContext context) {
+                return HomeController();
+              }
+          ),
+          ],
+          child: CustomApp()
+          );
       },
+    );
+  }
+}
+
+class CustomApp extends StatelessWidget {
+  const CustomApp({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final providerThemeController=Provider.of<ProviderThemeController>(context);
+    return MaterialApp(
+      theme: ThemeData(
+        brightness: providerThemeController.isDark?Brightness.dark:Brightness.light
+      ),
+      themeMode: ThemeMode.system,
+      debugShowCheckedModeBanner: false,
+      home: SplashScreen(),
     );
   }
 }

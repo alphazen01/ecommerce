@@ -1,5 +1,4 @@
 import 'package:abc/widget/bottom_navigationbar.dart';
-import 'package:abc/screens/home.dart';
 import 'package:abc/welcome/sign_up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

@@ -2,10 +2,22 @@ import 'package:get/get.dart';
 
 class LogicController extends GetxController{
 
+RxInt count=0.obs;
 
-getProduct(){
+increaseCount(){
+
+  count++;
+}
+
+
+decreaseCount(){
+if (count>0) {
+  count--;
+}
   
 }
+
+
 
 
 

@@ -1,13 +1,14 @@
+import 'package:abc/controller/cart_controller.dart';
+import 'package:abc/controller/home_controller.dart';
+import 'package:abc/controller/provider_theme_controller.dart';
 import 'package:abc/controller/theme_controller.dart';
 import 'package:abc/product/details.dart';
 import 'package:abc/screens/search.dart';
-import 'package:abc/widget/custom_accessories.dart';
-import 'package:abc/widget/custom_product.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,13 +20,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final themeController=Get.put(ThemeController());
-
   int activeIndex=0;
   final slideImage=[];
-  List products=[];
-  
-
-fetchImage()async{
+  fetchImage()async{
  var firestoreInstance=FirebaseFirestore.instance;
  QuerySnapshot qn=await firestoreInstance.collection("h_carousel").get();
  
@@ -38,36 +35,16 @@ fetchImage()async{
  });
 
 }
-fetchProductImage()async{
- var firestoreInstance=FirebaseFirestore.instance;
- QuerySnapshot qn=await firestoreInstance.collection("products").get();
- 
-   for(int i=0; i<qn.docs.length; i++){
-   print("${qn.docs[i]}");
-   products.add(
-    
-     {
-       "product-name":qn.docs[i]["product-name"],
-       "product-description":qn.docs[i]["product-description"],
-       "product-price":qn.docs[i]["product-price"],
-       "product-img":qn.docs[i]["product-img"],
-     }
-   );
- }
- setState(() {
-   
- });
-}
 @override
   void initState() {
     fetchImage();
-    fetchProductImage();
     super.initState();
   }
-
-
+ 
+ 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -80,18 +57,24 @@ fetchProductImage()async{
           ),
         ),
         actions: [
-          ObxValue(
-               (data)=> Switch(
-                 inactiveThumbColor: Colors.red,
-                 activeColor: Colors.blue,
-                 value: themeController.isDark.value, 
-                 onChanged: (Value){
-                   themeController.isDark.value=Value;
-                   themeController.changeAppTheme(themeController.isDark.value);
-                 },
+                Consumer<ProviderThemeController>(
+                  builder: (context, providerThemeController, child) {
+                   return Switch(
+                   inactiveThumbColor: Colors.red,
+                   activeColor: Colors.blue,
+                   value: providerThemeController.isDark, 
+                   onChanged: (value){
+                     if (value) {
+                       providerThemeController.setDarkTheme();
+                     }else{
+                       providerThemeController.setLightTheme();
+                     }
+                   },
+                  ); 
+                  },
+
                 ),
-                false.obs
-             )
+             
         ],
       ),
       body: SingleChildScrollView(
@@ -189,48 +172,56 @@ fetchProductImage()async{
               Expanded(
               child:Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: GridView.builder(
-                  itemCount: products.length,
-                  scrollDirection: Axis.vertical,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount:2,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 20,
-                  childAspectRatio: 1
-                  ), 
-                  itemBuilder: (BuildContext,  index){
-                    return GestureDetector(
-                      onTap: (){
-                       Navigator.push(context, MaterialPageRoute(builder:(_)=> DetailsScreen(product: products[index],))); 
-                      },
-                      child: Card(
-                        elevation: 3,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AspectRatio(
-                              aspectRatio: 2,
-                              child: Image.network(products[index]["product-img"])),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("${products[index]["product-name"]}",
-                                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700),),
-                                    SizedBox(height: 5,),
-                                     Text("${products[index]["product-price"].toString()}",
-                                     style: TextStyle(fontSize: 20,color: Colors.red),),
-                                  ],
-                                ),
+                child: Consumer<HomeController>(
+                  builder: (context,homeController,child) {
+                    if (homeController.products.isEmpty) {
+                      homeController.fetchProducts();
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    return GridView.builder(
+                      itemCount: homeController.products.length,
+                      scrollDirection: Axis.vertical,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount:2,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 20,
+                      childAspectRatio: 1
+                      ), 
+                      itemBuilder: (BuildContext,  index){
+                        return GestureDetector(
+                          onTap: (){
+                           Navigator.push(context, MaterialPageRoute(builder:(_)=> DetailsScreen(product: homeController.products[index]))); 
+                          },
+                          child: Card(
+                            elevation: 3,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  AspectRatio(
+                                  aspectRatio: 2,
+                                  child: Image.network(homeController. products[index].image)),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(homeController. products[index].title,
+                                        style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700),),
+                                        SizedBox(height: 5,),
+                                         Text(homeController.products[index].price.toString(),
+                                         style: TextStyle(fontSize: 20,color: Colors.red),),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
                           ),
-                      ),
-                    );
+                        );
+                      }
+                      );
                   }
-                  ),
+                ),
                 ), 
                 ),
               SizedBox(height: 20,)
